@@ -1,0 +1,11 @@
+Para crear la base de datos ejecutar estas dos consultas cambiando las rutas por las correspondientes y luego ejecutar el script insertarParticipantes.py:
+
+OAD CSV WITH HEADERS FROM "file:///Users/juanpellegrini/Documents/Maestría/paises_lat_long.csv" AS row
+MERGE (n:Pais {Nombre_Pais: Nombre_Pais, Latitud: Latitud, Longitud: Longitud})
+
+LOAD CSV WITH HEADERS FROM "file:///Users/juanpellegrini/Documents/Maestría/ciudades_paises.csv" AS row
+CREATE (l:Evento {Nombre_Evento: row.EventLocation, Año: row.EventYear})
+MERGE (m:Lugar {Nombre_Lugar: row.Lugar, Latitud: row.Latitud, Longitud: row.Longitud})
+MERGE (n:Pais {Nombre_Pais: row.Pais})
+MERGE (m)-[:PERTENECE]->(n)
+MERGE (l)-[:SE_CORRE_EN]->(m)
